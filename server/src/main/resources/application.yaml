@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: i-store-app
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/i_store_system?characterEncoding=utf8&serverTimeZone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 200289
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+
+swagger2:
+  show: true
+  group-name: ${spring.application.name}
+  base-package: com.imooc.pan
+  title: r-pan-server docs
+  description: r-pan-server docs
+  terms-of-service-url: http://127.0.0.1:${server.port}
+  contact-name: rubin
+  contact-url: https://blog.rubinchu.com
+  contact-email: rubinchu@126.com
+  version: 1.0
