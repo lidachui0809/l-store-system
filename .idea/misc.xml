@@ -11,6 +11,9 @@
         <option value="$PROJECT_DIR$/framework/web/pom.xml" />
         <option value="$PROJECT_DIR$/framework/cache/cache-core/pom.xml" />
         <option value="$PROJECT_DIR$/framework/cache/cache-caffeine/pom.xml" />
+        <option value="$PROJECT_DIR$/framework/i-store-engine/i-store-engine-loacl/pom.xml" />
+        <option value="$PROJECT_DIR$/framework/i-store-engine/i-store-engine-local/pom.xml" />
+        <option value="$PROJECT_DIR$/framework/i-store-core/pom.xml" />
       </list>
     </option>
   </component>

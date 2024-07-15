@@ -2,14 +2,13 @@ package com.ldc.store.common.aspect;
 
 import com.ldc.store.cache.core.constants.CacheConstants;
 import com.ldc.store.common.aspect.annotation.LoginIgnore;
-import com.ldc.store.common.utils.UserInfoHolder;
+import utils.UserInfoHolder;
 import com.ldc.store.core.response.R;
 import com.ldc.store.core.response.ResponseCode;
 import com.ldc.store.core.utils.JwtUtil;
 import com.ldc.store.modules.user.constants.UserConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

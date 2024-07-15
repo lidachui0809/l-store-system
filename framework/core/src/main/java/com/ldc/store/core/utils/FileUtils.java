@@ -108,9 +108,11 @@ public class FileUtils {
      */
     public static void writeStream2File(InputStream inputStream, File targetFile, Long totalSize) throws IOException {
         createFile(targetFile);
+        /* RandomAccessFile 一个支持随机读写的文件操作类 支持读写操作  */
         RandomAccessFile randomAccessFile = new RandomAccessFile(targetFile, "rw");
         FileChannel outputChannel = randomAccessFile.getChannel();
         ReadableByteChannel inputChannel = Channels.newChannel(inputStream);
+        /* 使用 sendfile 实现零拷贝 提高读写速度 */
         outputChannel.transferFrom(inputChannel, 0L, totalSize);
         inputChannel.close();
         outputChannel.close();
@@ -125,6 +127,7 @@ public class FileUtils {
      * @param targetFile
      */
     public static void createFile(File targetFile) throws IOException {
+        //如果存在多级目录 直接创建
         if (!targetFile.getParentFile().exists()) {
             targetFile.getParentFile().mkdirs();
         }
@@ -141,7 +144,7 @@ public class FileUtils {
     public static String generateDefaultStoreFileRealPath() {
         return new StringBuffer(System.getProperty("user.home"))
                 .append(File.separator)
-                .append("rpan")
+                .append("storeSystem")
                 .toString();
     }
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户文件信息表
+ * 用户文件信息表 这里是记录用户对文件管理信息的数据表
  *
  * @TableName r_pan_user_file
  */
@@ -35,7 +35,7 @@ public class RPanUserFile implements Serializable {
     private Long parentId;
 
     /**
-     * 真实文件id
+     * 真实文件id 与真实文件建立联系
      */
     @TableField(value = "real_file_id")
     private Long realFileId;

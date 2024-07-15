@@ -2,23 +2,40 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="server" />
+        <module name="i-store-engine-oss" />
         <module name="schedule" />
-        <module name="r-pan-core" />
+        <module name="i-store-engine-local" />
         <module name="r-pan-swagger2" />
+        <module name="r-pan-core" />
         <module name="r-pan-cache-core" />
         <module name="r-pan-cache-redis" />
+        <module name="i-store-engine-core" />
         <module name="r-pan-cache-caffeine" />
         <module name="r-pan-mybatis-plus" />
         <module name="r-pan-web" />
       </profile>
+      <profile name="Annotation profile for l-store-system" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.2.Final/mapstruct-processor-1.5.2.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.2.Final/mapstruct-1.5.2.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.2.0/lombok-mapstruct-binding-0.2.0.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/2.1.9.RELEASE/spring-boot-configuration-processor-2.1.9.RELEASE.jar" />
+        </processorPath>
+        <module name="server" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cache-caffeine" target="1.8" />
+      <module name="i-store-engine-loacl" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

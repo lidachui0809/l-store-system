@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 物理文件信息表
+ * 物理文件信息表 这里是文件的物理存储信息表
  *
  * @TableName r_pan_file
  */

@@ -2,10 +2,12 @@ package com.ldc.store.modules.user.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.ldc.store.common.aspect.annotation.LoginIgnore;
-import com.ldc.store.common.utils.UserInfoHolder;
+import utils.UserInfoHolder;
 import com.ldc.store.core.response.R;
+import com.ldc.store.core.utils.IdUtil;
 import com.ldc.store.modules.user.context.*;
-import com.ldc.store.modules.user.service.IRPanUserService;
+import com.ldc.store.modules.user.converter.UserConverter;
+import com.ldc.store.modules.user.service.IUserService;
 import com.ldc.store.modules.user.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +23,10 @@ public class UserController {
 
 
     @Autowired
-    private IRPanUserService iUserService;
+    private IUserService iUserService;
+
+    @Autowired
+    private UserConverter userConverter;
 
 
     //注册
@@ -30,9 +35,10 @@ public class UserController {
     @PostMapping("/register")
     @LoginIgnore
     public R register(@RequestBody @Validated RegisterVO registerVO){
-        UserRegisterContext userRegisterContext = new UserRegisterContext();
-        BeanUtil.copyProperties(registerVO, userRegisterContext);
-        return iUserService.register(userRegisterContext);
+        UserRegisterContext userRegisterContext =
+                userConverter.userRegisterPO2UserRegisterContext(registerVO);
+        Long userId = iUserService.register(userRegisterContext);
+        return R.data(IdUtil.encrypt(userId));
     }
 
 
@@ -40,14 +46,16 @@ public class UserController {
     @PostMapping("/login")
     @LoginIgnore
     public R login(@RequestBody @Validated LoginVO loginVO){
-        UserLoginContext userRegisterContext = new UserLoginContext();
+        UserLoginContext userRegisterContext = userConverter.userLoginPO2UserLoginContext(loginVO);
         BeanUtil.copyProperties(loginVO, userRegisterContext);
-        return iUserService.login(userRegisterContext);
+        String token = iUserService.login(userRegisterContext);
+        return R.data(token);
     }
 
     @RequestMapping("/loginOut")
     public R logout(){
-        return iUserService.loginOut(UserInfoHolder.get());
+        iUserService.loginOut(UserInfoHolder.get());
+        return R.success();
     }
 
     @ApiOperation(
@@ -59,8 +67,7 @@ public class UserController {
     @LoginIgnore
     @PostMapping("username/check")
     public R checkUsername(@Validated @RequestBody CheckUsernamePO checkUsernamePO) {
-        CheckUsernameContext checkUsernameContext = new CheckUsernameContext();
-        BeanUtil.copyProperties(checkUsernamePO,checkUsernameContext);
+        CheckUsernameContext checkUsernameContext = userConverter.checkUsernamePO2CheckUsernameContext(checkUsernamePO);
         String question = iUserService.checkUsername(checkUsernameContext);
         return R.data(question);
     }
@@ -75,8 +82,7 @@ public class UserController {
     @LoginIgnore
     @PostMapping("answer/check")
     public R checkAnswer(@Validated @RequestBody CheckAnswerPO checkAnswerPO) {
-        CheckAnswerContext checkAnswerContext =new CheckAnswerContext();
-        BeanUtil.copyProperties(checkAnswerPO,checkAnswerContext);
+        CheckAnswerContext checkAnswerContext =userConverter.checkAnswerPO2CheckAnswerContext(checkAnswerPO);
         String token = iUserService.checkAnswer(checkAnswerContext);
         return R.data(token);
     }
@@ -89,10 +95,8 @@ public class UserController {
     )
     @PostMapping("password/change")
     public R changePassword(@Validated @RequestBody ChangePasswordPO changePasswordPO) {
-        ChangePasswordContext changePasswordContext = new ChangePasswordContext();
-        BeanUtil.copyProperties(changePasswordPO,changePasswordContext);
-        changePasswordContext.setUserId(UserInfoHolder.get());
-        iUserService.changePassword(changePasswordContext);
+        ChangePasswordContext changePasswordContext =
+                userConverter.changePasswordPO2ChangePasswordContext(changePasswordPO);
         return R.success();
     }
 
@@ -106,12 +110,13 @@ public class UserController {
     @PostMapping("password/reset")
     @LoginIgnore
     public R resetPassword(@Validated @RequestBody ResetPasswordPO resetPasswordPO) {
-        ResetPasswordContext resetPasswordContext = new ResetPasswordContext();
-        BeanUtil.copyProperties(resetPasswordPO,resetPasswordContext);
+        ResetPasswordContext resetPasswordContext =userConverter.resetPasswordPO2ResetPasswordContext(resetPasswordPO);
         iUserService.resetPassword(resetPasswordContext);
         return R.success();
     }
 
+
+    //检验用户名 检验密保 同时 返回时效token验证 验证通过
     @ApiOperation(
             value = "查询登录用户的基本信息",
             notes = "该接口提供了查询登录用户的基本信息的功能",
@@ -125,5 +130,5 @@ public class UserController {
     }
 
 
-    //检验用户名 检验密保 同时 返回时效token验证 验证通过
+
 }

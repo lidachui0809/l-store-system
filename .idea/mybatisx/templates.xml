@@ -6,7 +6,7 @@
         <option name="generateConfig">
           <GenerateConfig>
             <option name="annotationType" value="MYBATIS_PLUS3" />
-            <option name="basePackage" value="com.ldc.store.modules.file" />
+            <option name="basePackage" value="com.ldc.store.modules.log" />
             <option name="basePath" value="src/main/java" />
             <option name="classNameStrategy" value="camel" />
             <option name="encoding" value="UTF-8" />
@@ -50,14 +50,14 @@
                   <option name="packageName" value="${domain.basePackage}.service" />
                 </ModuleInfoGo>
                 <ModuleInfoGo>
-                  <option name="basePath" value="src/main/resources" />
+                  <option name="basePath" value="src/main/resources/mapper" />
                   <option name="configFileName" value="mapperXml.ftl" />
                   <option name="configName" value="mapperXml" />
                   <option name="encoding" value="${domain.encoding}" />
                   <option name="fileName" value="${domain.fileName}Mapper" />
                   <option name="fileNameWithSuffix" value="${domain.fileName}Mapper.xml" />
                   <option name="modulePath" value="$PROJECT_DIR$/server" />
-                  <option name="packageName" value="mapper/file" />
+                  <option name="packageName" value="mapper" />
                 </ModuleInfoGo>
               </list>
             </option>
@@ -68,16 +68,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="RPanUserFile" />
-                  <option name="tableName" value="r_pan_user_file" />
-                </TableUIInfo>
-                <TableUIInfo>
-                  <option name="className" value="RPanFileChunk" />
-                  <option name="tableName" value="r_pan_file_chunk" />
-                </TableUIInfo>
-                <TableUIInfo>
-                  <option name="className" value="RPanFile" />
-                  <option name="tableName" value="r_pan_file" />
+                  <option name="className" value="RPanErrorLog" />
+                  <option name="tableName" value="r_pan_error_log" />
                 </TableUIInfo>
               </list>
             </option>

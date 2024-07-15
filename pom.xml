@@ -10,6 +10,7 @@
     <modules>
         <module>framework</module>
         <module>server</module>
+        <module>framework/i-store-engine</module>
     </modules>
 
     <parent>
@@ -161,11 +162,18 @@
 <!--                <artifactId>rocketmq-spring-boot-starter</artifactId>-->
 <!--                <version>${rocketmq.version}</version>-->
 <!--            </dependency>-->
+            <!--  mapstruct 类属性映射工具 -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${org.mapstruct.version}</version>
             </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.mapstruct</groupId>-->
+<!--                <artifactId>mapstruct-processor</artifactId>-->
+<!--                <version>${org.mapstruct.version}</version>-->
+<!--                <scope>provided</scope>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>

@@ -1,0 +1,30 @@
+package java.com.ldc.store.engine.oss;
+
+
+import com.ldc.store.engine.core.AbstractStoreEngine;
+import com.ldc.store.engine.core.context.DeleteRealFileContext;
+import com.ldc.store.engine.core.context.StoreFileChunkContext;
+import com.ldc.store.engine.core.context.StoreFileContext;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+
+@Component
+public  class OSSStoreEngine extends AbstractStoreEngine {
+
+
+    @Override
+    protected void doStore(StoreFileContext context) throws IOException {
+
+    }
+
+    @Override
+    protected void doStoreChunk(StoreFileChunkContext context) throws IOException {
+
+    }
+
+    @Override
+    protected void doDelete(DeleteRealFileContext context) throws IOException {
+
+    }
+}

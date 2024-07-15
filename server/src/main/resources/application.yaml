@@ -12,10 +12,10 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*Mapper.xml
-
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 swagger2:
   show: true
   group-name: ${spring.application.name}

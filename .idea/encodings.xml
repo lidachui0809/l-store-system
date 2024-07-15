@@ -11,6 +11,14 @@
     <file url="file://$PROJECT_DIR$/framework/cache/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/framework/core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/framework/core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/i-store-engine-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/i-store-engine-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/i-store-engine-local/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/i-store-engine-local/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/i-store-engine-oss/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/i-store-engine-oss/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/framework/i-store-engine/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/framework/orm/mybatis-plus/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/framework/orm/mybatis-plus/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/framework/orm/src/main/java" charset="UTF-8" />
