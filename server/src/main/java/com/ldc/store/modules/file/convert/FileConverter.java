@@ -1,7 +1,9 @@
 package com.ldc.store.modules.file.convert;
 
+import com.ldc.store.engine.core.context.MergeFileContext;
 import com.ldc.store.engine.core.context.StoreFileChunkContext;
 import com.ldc.store.modules.file.context.*;
+import com.ldc.store.modules.file.domain.RPanUserFile;
 import com.ldc.store.modules.file.vo.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -32,13 +34,33 @@ public interface FileConverter {
 
     /* 这里的record是需要SaveFileContext 业务逻辑获得  */
     @Mapping(target = "record" ,ignore = true)
-    SaveFileContext uploadFileContext2SaveFileContext(UploadFileContext context);
+    SaveChunkFileContext uploadFileContext2SaveFileContext(UploadFileContext context);
 
     @Mapping(target = "userId" ,expression = "java(com.ldc.store.common.utils.UserInfoHolder.get())")
     ChunkUploadFileContext chunkUploadFileVO2ChunkUploadFileContext(ChunkUploadFileVO chunkUploadFileVO);
 
-    SaveFileContext chunkUploadFileContext2SaveFileContext(ChunkUploadFileContext context);
+    SaveChunkFileContext chunkUploadFileContext2SaveFileContext(ChunkUploadFileContext context);
 
     @Mapping(target = "realPath",ignore = true)
-    StoreFileChunkContext saveFileContext2StoreFileChunkContext(SaveFileContext saveFileContext);
+    StoreFileChunkContext saveFileContext2StoreFileChunkContext(SaveChunkFileContext saveChunkFileContext);
+
+    @Mapping(target = "userId" ,expression = "java(com.ldc.store.common.utils.UserInfoHolder.get())")
+    QueryFileChunkContext queryFileChunksVO2QueryFileChunksVO(QueryFileChunksVO queryFileChunksVO);
+
+
+    @Mapping(target = "userId" ,expression = "java(com.ldc.store.common.utils.UserInfoHolder.get())")
+    @Mapping(target = "parentId" ,expression = "java(com.ldc.store.core.utils.IdUtil.decrypt(chunkFileMergeVO.getParentId()))")
+    ChunkFileMergeContext chunkFileMergeVO2ChunkFileMergeContext(ChunkFileMergeVO chunkFileMergeVO);
+
+    SaveChunkFileMergeContext chunkFileMergeContext2SaveChunkFileMergeContext(ChunkFileMergeContext context);
+
+    MergeFileContext chunkFileMergeContext2MergeFileContext(SaveChunkFileMergeContext context);
+
+    @Mapping(target = "label",source = "record.filename")
+    @Mapping(target = "id", source = "record.fileId")
+    @Mapping(target = "children", expression = "java(com.google.common.collect.Lists.newArrayList())")
+    FolderTreeNodeVO panUserFiles2FolderTreeNodeVO(RPanUserFile record);
+
+    @Mapping(target = "transferFileId",source = "copyFileId")
+    FileTransferContext fileCopyContext2FileTransferContext(FileCopyContext fileCopyContext);
 }

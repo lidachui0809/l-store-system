@@ -2,7 +2,7 @@ package com.ldc.store.modules.user.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.ldc.store.common.aspect.annotation.LoginIgnore;
-import utils.UserInfoHolder;
+import com.ldc.store.common.utils.UserInfoHolder;
 import com.ldc.store.core.response.R;
 import com.ldc.store.core.utils.IdUtil;
 import com.ldc.store.modules.user.context.*;

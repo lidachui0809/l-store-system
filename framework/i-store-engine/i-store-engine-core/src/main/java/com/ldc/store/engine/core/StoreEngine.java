@@ -1,9 +1,7 @@
 package com.ldc.store.engine.core;
 
 
-import com.ldc.store.engine.core.context.DeleteRealFileContext;
-import com.ldc.store.engine.core.context.StoreFileChunkContext;
-import com.ldc.store.engine.core.context.StoreFileContext;
+import com.ldc.store.engine.core.context.*;
 
 import java.io.IOException;
 
@@ -31,4 +29,16 @@ public interface StoreEngine {
     void delete(DeleteRealFileContext context) throws IOException;
 
     void storeChunk(StoreFileChunkContext context) throws IOException;
+
+
+    /**
+     * 合并文件分片
+     *
+     * @param context
+     * @throws IOException
+     */
+    void mergeFile(MergeFileContext context) throws IOException;
+
+    void readFile(ReadFileContext context) throws IOException;
+
 }

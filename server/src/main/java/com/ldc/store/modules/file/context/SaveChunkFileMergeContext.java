@@ -2,10 +2,11 @@ package com.ldc.store.modules.file.context;
 
 import com.ldc.store.modules.file.domain.RPanFile;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
-public class SaveFileContext {
+public class SaveChunkFileMergeContext {
 
     /**
      * 文件名称
@@ -18,14 +19,14 @@ public class SaveFileContext {
     private String identifier;
 
     /**
-     * 文件大小
+     * 文件总大小
      */
     private Long totalSize;
 
     /**
-     * 要上传的文件实体
+     * 文件的父文件夹ID
      */
-    private MultipartFile file;
+    private Long parentId;
 
     /**
      * 当前登录的用户ID
@@ -33,13 +34,13 @@ public class SaveFileContext {
     private Long userId;
 
     /**
-     * 实体文件记录
+     * 物理文件记录
      */
     private RPanFile record;
 
     /**
-     * 文件上传的物理路径
+     * 文件分片的真实存储路径集合
      */
-    private String realPath;
+    private List<String> realPathList;
 
 }

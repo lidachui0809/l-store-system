@@ -4,6 +4,10 @@ import com.ldc.store.core.response.R;
 import com.ldc.store.modules.file.context.*;
 import com.ldc.store.modules.file.domain.RPanUserFile;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ldc.store.modules.file.enums.FolderFlagEnum;
+import com.ldc.store.modules.file.vo.BreadcrumbsVO;
+import com.ldc.store.modules.file.vo.FileSearchResultVO;
+import com.ldc.store.modules.file.vo.FolderTreeNodeVO;
 import com.ldc.store.modules.file.vo.UserFileResultVO;
 
 import java.util.List;
@@ -28,4 +32,20 @@ public interface IUserFileService extends IService<RPanUserFile> {
     boolean secUpload(SecUploadFileContext context);
 
     void upload(UploadFileContext context);
+
+    void saveMergeAfterFileRecord(ChunkFileMergeContext context);
+
+    void downloadFile(FileDownloadContext fileDownloadContext);
+
+    void previewFile(FilePreviewContext filePreviewContext);
+
+    List<FolderTreeNodeVO> getFolderTree(QueryFolderTreeContext queryFolderTreeContext);
+
+    void transferFile(FileTransferContext fileTransferContext);
+
+    void copyFiles(FileCopyContext fileTransferContext);
+
+    List<FileSearchResultVO> search(FileSearchContext context);
+
+    List<BreadcrumbsVO> getBreadcrumbs(BreadcrumbsContext context);
 }

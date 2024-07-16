@@ -190,7 +190,7 @@ public class FileUtils {
     }
 
     /**
-     * 追加写文件
+     * 追加写文件 nio包下提供的一个将原目录下的文件追加到目标文件中
      *
      * @param target
      * @param source

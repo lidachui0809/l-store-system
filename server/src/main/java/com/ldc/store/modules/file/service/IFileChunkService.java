@@ -1,9 +1,12 @@
 package com.ldc.store.modules.file.service;
 
+import com.ldc.store.modules.file.context.ChunkFileMergeContext;
 import com.ldc.store.modules.file.context.ChunkUploadFileContext;
+import com.ldc.store.modules.file.context.QueryFileChunkContext;
 import com.ldc.store.modules.file.domain.RPanFileChunk;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ldc.store.modules.file.vo.ChunkFileUploadResultVO;
+import com.ldc.store.modules.file.vo.FileChunksVO;
 
 /**
 * @author 李Da锤
@@ -13,4 +16,8 @@ import com.ldc.store.modules.file.vo.ChunkFileUploadResultVO;
 public interface IFileChunkService extends IService<RPanFileChunk> {
 
     ChunkFileUploadResultVO chunkFileUpload(ChunkUploadFileContext context);
+
+    FileChunksVO getFileChunksIInfo(QueryFileChunkContext context);
+
+    void mergeChunkFile(ChunkFileMergeContext context);
 }

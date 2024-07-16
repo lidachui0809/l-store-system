@@ -2,7 +2,7 @@ package com.ldc.store.common.aspect;
 
 import com.ldc.store.cache.core.constants.CacheConstants;
 import com.ldc.store.common.aspect.annotation.LoginIgnore;
-import utils.UserInfoHolder;
+import com.ldc.store.common.utils.UserInfoHolder;
 import com.ldc.store.core.response.R;
 import com.ldc.store.core.response.ResponseCode;
 import com.ldc.store.core.utils.JwtUtil;

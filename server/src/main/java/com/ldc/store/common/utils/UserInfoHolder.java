@@ -1,4 +1,4 @@
-package utils;
+package com.ldc.store.common.utils;
 
 import com.ldc.store.core.constants.RPanConstants;
 

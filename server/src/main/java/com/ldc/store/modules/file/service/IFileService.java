@@ -1,12 +1,8 @@
 package com.ldc.store.modules.file.service;
 
-import com.ldc.store.modules.file.context.ChunkUploadFileContext;
-import com.ldc.store.modules.file.context.QueryRealFileListContext;
-import com.ldc.store.modules.file.context.SaveFileContext;
-import com.ldc.store.modules.file.context.UploadFileContext;
+import com.ldc.store.modules.file.context.*;
 import com.ldc.store.modules.file.domain.RPanFile;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ldc.store.modules.file.vo.ChunkFileUploadResultVO;
 
 import java.util.List;
 
@@ -20,5 +16,7 @@ public interface IFileService extends IService<RPanFile> {
 
     List<RPanFile> queryListFilesById(QueryRealFileListContext context);
 
-    void saveFileInCD(SaveFileContext context);
+    void saveFileInCD(SaveChunkFileContext context);
+
+    void mergeChunkFile(SaveChunkFileMergeContext saveChunkFileMergeContext);
 }

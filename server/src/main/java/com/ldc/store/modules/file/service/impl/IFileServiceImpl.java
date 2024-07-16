@@ -7,16 +7,13 @@ import com.ldc.store.core.utils.FileUtils;
 import com.ldc.store.core.utils.IdUtil;
 import com.ldc.store.engine.core.StoreEngine;
 import com.ldc.store.engine.core.context.DeleteRealFileContext;
+import com.ldc.store.engine.core.context.MergeFileContext;
 import com.ldc.store.engine.core.context.StoreFileContext;
-import com.ldc.store.modules.file.context.ChunkUploadFileContext;
-import com.ldc.store.modules.file.context.DeleteFileContext;
-import com.ldc.store.modules.file.context.QueryRealFileListContext;
-import com.ldc.store.modules.file.context.SaveFileContext;
+import com.ldc.store.modules.file.context.*;
+import com.ldc.store.modules.file.convert.FileConverter;
 import com.ldc.store.modules.file.domain.RPanFile;
-import com.ldc.store.modules.file.event.DeleteFileEvent;
 import com.ldc.store.modules.file.service.IFileService;
 import com.ldc.store.modules.file.mapper.RPanFileMapper;
-import com.ldc.store.modules.file.vo.ChunkFileUploadResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -39,14 +36,17 @@ public class IFileServiceImpl extends ServiceImpl<RPanFileMapper, RPanFile>
 
 
     private ApplicationContext applicationContext;
+    @Autowired
+    private StoreEngine storeEngine;
 
+    @Autowired
+    private FileConverter fileConverter;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    @Autowired
-    private StoreEngine storeEngine;
+
 
     @Override
     public List<RPanFile> queryListFilesById(QueryRealFileListContext context) {
@@ -62,7 +62,7 @@ public class IFileServiceImpl extends ServiceImpl<RPanFileMapper, RPanFile>
      * @param context
      */
     @Override
-    public void saveFileInCD(SaveFileContext context) {
+    public void saveFileInCD(SaveChunkFileContext context) {
         //保存文件到磁盘
         saveMultipartFile(context);
         //保存文件记录
@@ -71,7 +71,31 @@ public class IFileServiceImpl extends ServiceImpl<RPanFileMapper, RPanFile>
         context.setRecord(rPanFile);
     }
 
+    @Override
+    public void mergeChunkFile(SaveChunkFileMergeContext context) {
+        try {
+            MergeFileContext mergeFileContext =fileConverter.chunkFileMergeContext2MergeFileContext(context);
+            //交给存储引擎处理
+            storeEngine.mergeFile(mergeFileContext);
+            RPanFile panFile = saveRealFileRecord(context.getFilename(), mergeFileContext.getRealPath(),
+                    context.getTotalSize(), context.getIdentifier(), context.getUserId());
+            context.setRecord(panFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RPanBusinessException("文件合并失败！");
+        }
+    }
 
+
+    /**
+     * 保存物理文件信息
+     * @param filename
+     * @param realPath
+     * @param totalSize
+     * @param identifier
+     * @param userId
+     * @return
+     */
     private RPanFile saveRealFileRecord(String filename, String realPath, Long totalSize, String identifier, Long userId) {
         RPanFile rPanFile = assembleRPanFile(filename, realPath, totalSize, identifier, userId);
         // 如果文件信息保存失败 需要回滚文件保存操作 调用文件引擎删除已保存的文件
@@ -89,7 +113,7 @@ public class IFileServiceImpl extends ServiceImpl<RPanFileMapper, RPanFile>
         return rPanFile;
     }
 
-    private void saveMultipartFile(SaveFileContext context) {
+    private void saveMultipartFile(SaveChunkFileContext context) {
         try{
             StoreFileContext storeFileContext = new StoreFileContext();
             storeFileContext.setTotalSize(context.getTotalSize());

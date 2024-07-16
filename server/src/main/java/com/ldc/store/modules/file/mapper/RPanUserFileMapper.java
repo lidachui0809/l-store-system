@@ -1,8 +1,10 @@
 package com.ldc.store.modules.file.mapper;
 
+import com.ldc.store.modules.file.context.FileSearchContext;
 import com.ldc.store.modules.file.context.QueryFileListContext;
 import com.ldc.store.modules.file.domain.RPanUserFile;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ldc.store.modules.file.vo.FileSearchResultVO;
 import com.ldc.store.modules.file.vo.UserFileResultVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,6 +19,8 @@ import java.util.List;
 public interface RPanUserFileMapper extends BaseMapper<RPanUserFile> {
 
     List<UserFileResultVO> queryFileList(@Param("param") QueryFileListContext queryFileListContext);
+
+    List<FileSearchResultVO> searchFile(FileSearchContext context);
 }
 
 

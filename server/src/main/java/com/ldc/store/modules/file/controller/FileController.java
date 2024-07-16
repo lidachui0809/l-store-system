@@ -1,7 +1,7 @@
 package com.ldc.store.modules.file.controller;
 
 import com.google.common.base.Splitter;
-import utils.UserInfoHolder;
+import com.ldc.store.common.utils.UserInfoHolder;
 import com.ldc.store.core.constants.RPanConstants;
 import com.ldc.store.core.response.R;
 import com.ldc.store.core.utils.IdUtil;
@@ -12,14 +12,21 @@ import com.ldc.store.modules.file.enums.DelFlagEnum;
 import com.ldc.store.modules.file.service.IFileChunkService;
 import com.ldc.store.modules.file.service.IUserFileService;
 import com.ldc.store.modules.file.vo.*;
+import io.micrometer.core.instrument.Meter;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
+import java.util.Spliterators;
 import java.util.stream.Collectors;
 
 @RestController
@@ -134,4 +141,138 @@ public class FileController {
         ChunkFileUploadResultVO chunkFileUploadVO=iFileChunkService.chunkFileUpload(context);
         return R.data(chunkFileUploadVO);
     }
+
+    /**
+     * 查询文件上传分片的信息
+     * @param queryFileChunksVO
+     * @return
+     */
+    @GetMapping("/chunk-upload")
+    public R<FileChunksVO> getFileChunksInfo(QueryFileChunksVO queryFileChunksVO){
+        QueryFileChunkContext context=fileConverter.queryFileChunksVO2QueryFileChunksVO(queryFileChunksVO);
+        FileChunksVO fileChunksVO=iFileChunkService.getFileChunksIInfo(context);
+        return R.data(fileChunksVO);
+    }
+
+    /**
+     * 分片文件合并
+     * @param chunkFileMergeVO
+     * @return
+     */
+    @PostMapping("/merge")
+    public R chunkFileMerge(@RequestBody ChunkFileMergeVO chunkFileMergeVO){
+        ChunkFileMergeContext context=fileConverter.chunkFileMergeVO2ChunkFileMergeContext(chunkFileMergeVO);
+        iFileChunkService.mergeChunkFile(context);
+        return R.success();
+    }
+
+
+    /**
+     * 文件下载
+     */
+    @GetMapping("/download")
+    public void fileDownload(@NotNull @RequestParam(value = "fileId",required = false) String fileId
+                , HttpServletResponse response){
+        FileDownloadContext fileDownloadContext = new FileDownloadContext();
+        fileDownloadContext.setFileId(IdUtil.decrypt(fileId));
+        fileDownloadContext.setUserId(UserInfoHolder.get());
+        fileDownloadContext.setResponse(response);
+        fileUserService.downloadFile(fileDownloadContext);
+    }
+
+    /**
+     * 文件预览
+     */
+    @GetMapping("/preview")
+    public void preview(@NotNull @RequestParam(value = "fileId",required = false) String fileId
+            , HttpServletResponse response){
+        FilePreviewContext filePreviewContext = new FilePreviewContext();
+        filePreviewContext.setFileId(IdUtil.decrypt(fileId));
+        filePreviewContext.setUserId(UserInfoHolder.get());
+        filePreviewContext.setResponse(response);
+        fileUserService.previewFile(filePreviewContext);
+    }
+
+    /**
+     * 获得用户的文件夹树
+     */
+    @GetMapping("/folder/tree")
+    public R<List<FolderTreeNodeVO>> folderTree(){
+        QueryFolderTreeContext queryFolderTreeContext=new QueryFolderTreeContext();
+        queryFolderTreeContext.setUserId(UserInfoHolder.get());
+        List<FolderTreeNodeVO> result= fileUserService.getFolderTree(queryFolderTreeContext);
+        return R.data(result);
+    }
+
+    /**
+     * 文件批量移动
+     * @return
+     */
+    @PostMapping("/transfer")
+    public R fileTransfer(@RequestBody  FileTransferVO fileTransferVO){
+        FileTransferContext fileTransferContext=new FileTransferContext();
+
+        List<Long> transferFileIds= Splitter.on(RPanConstants.COMMON_SEPARATOR)
+                .splitToList(fileTransferVO.getFileIds()).stream().map(Long::parseLong).collect(Collectors.toList());
+        fileTransferContext.setUserId(UserInfoHolder.get());
+        fileTransferContext.setTargetParentId(IdUtil.decrypt(fileTransferVO.getTargetParentId()));
+        fileTransferContext.setTransferFileId(transferFileIds);
+        fileUserService.transferFile(fileTransferContext);
+        return R.success();
+    }
+
+
+    /**
+     * 文件批量复制
+     * @return
+     */
+    @PostMapping("/copy")
+    public R fileCopy(@RequestBody  FileCopyVO fileTransferVO){
+        FileCopyContext fileTransferContext=new FileCopyContext();
+
+        List<Long> transferFileIds= Splitter.on(RPanConstants.COMMON_SEPARATOR)
+                .splitToList(fileTransferVO.getFileIds()).stream().map(Long::parseLong).collect(Collectors.toList());
+        fileTransferContext.setUserId(UserInfoHolder.get());
+        fileTransferContext.setTargetParentId(IdUtil.decrypt(fileTransferVO.getTargetParentId()));
+        fileTransferContext.setCopyFileId(transferFileIds);
+        fileUserService.copyFiles(fileTransferContext);
+        return R.success();
+    }
+
+
+    @GetMapping("/search")
+    public R<List<FileSearchResultVO>> search(@Validated FileSearchVO fileSearchVO) {
+        FileSearchContext context = new FileSearchContext();
+        context.setKeyword(fileSearchVO.getKeyword());
+        context.setUserId(UserInfoHolder.get());
+        String fileTypes = fileSearchVO.getFileTypes();
+        if (StringUtils.isNotBlank(fileTypes) && !Objects.equals(FileConstants.ALL_TYPE_FILE, fileTypes)) {
+            List<Integer> fileTypeArray = Splitter.on(RPanConstants.COMMON_SEPARATOR).splitToList(fileTypes).stream().map(Integer::valueOf).collect(Collectors.toList());
+            context.setFileTypeArray(fileTypeArray);
+        }
+        List<FileSearchResultVO> result = fileUserService.search(context);
+        return R.data(result);
+    }
+
+    @GetMapping("/breadcrumbs")
+    public R<List<BreadcrumbsVO>> getBreadcrumbs(@Validated @RequestParam(value = "fileId") String fileId) {
+        BreadcrumbsContext context = new BreadcrumbsContext();
+        context.setFileId(IdUtil.decrypt(fileId));
+        context.setUserId(UserInfoHolder.get());
+        List<BreadcrumbsVO> result = fileUserService.getBreadcrumbs(context);
+        return R.data(result);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
